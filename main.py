@@ -1,20 +1,22 @@
-def my_func(storage):
-    it = iter(storage)
+class CycleIterator():
+    def __init__(self, storage):
+        self.storage = storage
+        self.iterator = iter(storage)
 
-    try:
-        while True:
-            next_it = next(it)
-            print(next_it)
-    except StopIteration:
-        print('End of iteration')
+    def __iter__(self):
+        return self
 
+    def __next__(self):
+        try:
+            return next(self.iterator)
+        except StopIteration:
+            self.iterator = iter(self.storage)
+            return next(self.iterator)
 
 if __name__ == '__main__':
-    storage = [1,2,3]
-    my_func(storage)
+    my_it = CycleIterator([1,2,3])
 
-    my_func(storage)
-
-    it = iter(storage)
+    for item in my_it:
+        print(item)
 
 
